@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=640" />
+
+    <link rel="stylesheet" href="stylesheets/core.css" media="screen"/>
+    <link rel="stylesheet" href="stylesheets/mobile.css" media="handheld, only screen and (max-device-width:640px)"/>
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css"/>
+
+    <script type="text/javascript" src="javascripts/modernizr.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="javascripts/headsmart.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function () {
+        $('#main_content').headsmart()
+      })
+    </script>
+    <title>Protected by wnyc</title>
+  </head>
+
+  <body>
+    <a id="forkme_banner" href="https://github.com/wnyc/protected">View on GitHub</a>
+    <div class="shell">
+
+      <header>
+        <span class="ribbon-outer">
+          <span class="ribbon-inner">
+            <h1>Protected</h1>
+            <h2>Protect objects against accidental disclosure in Django's debug mode.   </h2>
+          </span>
+          <span class="left-tail"></span>
+          <span class="right-tail"></span>
+        </span>
+      </header>
+
+      <section id="downloads">
+        <span class="inner">
+          <a href="https://github.com/wnyc/protected/zipball/master" class="zip"><em>download</em> .ZIP</a><a href="https://github.com/wnyc/protected/tarball/master" class="tgz"><em>download</em> .TGZ</a>
+        </span>
+      </section>
+
+
+      <span class="banner-fix"></span>
+
+
+      <section id="main_content">
+        <h3>
+<a name="overview" class="anchor" href="#overview"><span class="octicon octicon-link"></span></a>Overview</h3>
+
+<p>Wouldn't it completely suck to accidentally leak sensitive configuration data like your AWS keys into the wild while running Django in DEBUG mode? </p>
+
+<p>Yes, Django protects your configuration variables from disclosure if
+your variable name happens to match one of their "magic" pattersn like
+"API" or "SECRET".  But good engineers don't depend on magic and that
+particular bit of magic does little to protect your secrets once they
+make it from your configuiration variables into the local varaibles in
+your code, which Django also happily shares in debug mode.</p>
+
+<p>Well, our new <em>protected</em> module puts an end to that problem.  </p>
+
+<h3>
+<a name="getting-started" class="anchor" href="#getting-started"><span class="octicon octicon-link"></span></a>Getting started</h3>
+
+<p>To get started you need to install procted.  It's been uploaded to Pypi to installation is a cinch: </p>
+
+<pre><code>easy_install protected
+</code></pre>
+
+<p>Now lets try it out.  Normally when you create a seccret, its easily
+readable like this:</p>
+
+<pre><code>$ python
+Python 2.6.5
+Type "help", "copyright", "credits" or "license" for more information"
+&gt;&gt;&gt; secret = 'secret'
+&gt;&gt;&gt; secret
+secret
+</code></pre>
+
+<p>That sort of sucks; ProtectedString tries to remedy this situation by
+providing an alternative <code>__repr__</code> method for your secret so it isn't
+disclosed.  Lets try it out</p>
+
+<pre><code>&gt;&gt;&gt; from protected import ProtectedString
+&gt;&gt;&gt; secret = ProtectedString("uber secret")
+&gt;&gt;&gt; secret
+&gt;&gt;&gt; &lt;Protected String #139757326589296 ***********&gt;
+</code></pre>
+
+<p>Now you can get at the contents of this as a normal string if you really want like this:</p>
+
+<pre><code>&gt;&gt;&gt; str(secret)
+uber secret
+</code></pre>
+
+<p>So, what's happening?  A ProtectedString object is simply a superclass of a string with <code>__repr__</code> overridden to prevent its display.   You can still convert it to a normal string to print its value by calling str() on it, which demotes it to a normal string.</p>
+
+<p>But there's a little more happening under the hood than that.</p>
+
+<pre><code>&gt;&gt;&gt; secret + "!"
+&lt;Protected String #139757326589392 ***********&gt;
+&gt;&gt;&gt; str(secret + "!")
+'uber secret!'
+</code></pre>
+
+<p>ProtectedString can survive basic operations against it.   Even this works</p>
+
+<pre><code>&gt;&gt;&gt; very = "Very %s!" % secret
+&gt;&gt;&gt; very
+&lt;Protected String #139757326548616 ***********&gt;
+&gt;&gt;&gt; str(very)
+'Very uber secret!'
+&gt;&gt;&gt; 
+</code></pre>
+
+<p>There are some limits to ProtectedString's ability to obfuscate itself.   This operation does not protect the string:</p>
+
+<pre><code>&gt;&gt;&gt; "%s" % (secret,)
+uber secret
+</code></pre>
+
+<p>The difference likes in whom <code>__rmod__</code> is called against. </p>
+
+<p><code>"%s" % ProtectedString("secret")</code> calls ProtectedString's <code>__rmod__</code> method.   <code>"%s%" % (ProtectedString("secret"),)</code> doesn't.  </p>
+
+<p>While imperfect, if we use this, it may decrease the surface area from
+which secrets might leak.</p>
+
+<p>Anyhow, I encourage you to play with this, apply it to our config
+files and try to break it.  Please try to break it.  I look forward to
+your feedback - Adam DePrince (<a href="https://github.com/adamdeprince" class="user-mention">@adamdeprince</a>)</p>
+      </section>
+
+      <footer>
+        <span class="ribbon-outer">
+          <span class="ribbon-inner">
+            <p>this project by <a href="https://github.com/wnyc">wnyc</a> can be found on <a href="https://github.com/wnyc/protected">GitHub</a></p>
+          </span>
+          <span class="left-tail"></span>
+          <span class="right-tail"></span>
+        </span>
+        <p>Generated with <a href="http://pages.github.com">GitHub Pages</a> using Merlot</p>
+        <span class="octocat"></span>
+      </footer>
+
+    </div>
+
+    
+  </body>
+</html>
