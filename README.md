@@ -9,19 +9,18 @@ particular bit of magic does little to protect your secrets once they
 make it from your configuiration variables into the local varaibles in
 your code, which Django also happily shares in debug mode.
 
-Well, WNYC's new protected module puts an end to that problem.  
+Well, our new *protected* module puts an end to that problem.  
 
 ### Getting started
 
-First, lets install protected.  Its already been uploaded to pypi, so you can just type this:
+To get started you need to install procted.  It's been uploaded to Pypi to installation is a cinch: 
 
 ``` 
 easy_install protected
 ```
 
-Now lets look at how protected works. 
-
-Normally when you create a seccret, its easily readable like this:
+Now lets try it out.  Normally when you create a seccret, its easily
+readable like this:
 
 ```
 $ python
@@ -50,7 +49,7 @@ Now you can get at the contents of this as a normal string if you really want li
 uber secret
 ```
 
-So, what's happening?  A ProtectedString object is simply a superclass of a string with __repr__ overridden to prevent its display.   You can still convert it to a normal string to print its value by calling str() on it, which demotes it to a normal string.
+So, what's happening?  A ProtectedString object is simply a superclass of a string with `__repr__` overridden to prevent its display.   You can still convert it to a normal string to print its value by calling str() on it, which demotes it to a normal string.
 
 But there's a little more happening under the hood than that.
 
@@ -79,7 +78,7 @@ There are some limits to ProtectedString's ability to obfuscate itself.   This o
 uber secret
 ```
 
-The difference likes in whom __rmod__ is called against. 
+The difference likes in whom `__rmod__` is called against. 
 
 
 `"%s" % ProtectedString("secret")` calls ProtectedString's `__rmod__` method.   `"%s%" % (ProtectedString("secret"),)` doesn't.  
