@@ -23,27 +23,28 @@ class ProtectedStringTestCase(TestCase):
                                  self.protected_string)
 
     def test_protected_string_true(self):
-        self.assertTrue(bool(ProtectedString("abc")))
+        self.assertTrue(ProtectedString("abc"))
 
     def test_protected_string_false(self):
-        self.assertFalse(bool(ProtectedString("")))
+        self.assertFalse(ProtectedString(""))
 
     def test_protected_string_assert_instance(self):
         self.assertTrue(isinstance(self.protected_string, ProtectedString))
 
     def test_protected_string_add(self):
-        ps_a = ProtectedString('abc') + 'def'
-        self.assertTrue(isinstance(ps_a, ProtectedString))
-        self.assertEqual(str(ps_a), 'abcdef')
+        protected_string = ProtectedString('abc') + 'def'
+        self.assertTrue(isinstance(protected_string, ProtectedString))
+        self.assertEqual(str(protected_string), 'abcdef')
 
     def test_protected_string_radd(self):
-        ps_b = 'abc' + ProtectedString('def')
-        self.assertTrue(isinstance(ps_b, ProtectedString))
-        self.assertEqual(str(ps_b), 'abcdef')
+        protected_string = 'abc' + ProtectedString('def')
+        self.assertTrue(isinstance(protected_string, ProtectedString))
+        self.assertEqual(str(protected_string), 'abcdef')
 
     def test_protected_string_replace(self):
-        ps_c = ProtectedString("abcdef").replace('b', 'd')
-        self.assertEqual(str(ps_c), 'adcdef')
+        protected_string = ProtectedString("abcdef").replace('b', 'd')
+        self.assertTrue(isinstance(protected_string, ProtectedString))
+        self.assertEqual(str(protected_string), 'adcdef')
         
 
     def test_multiplication(self):
