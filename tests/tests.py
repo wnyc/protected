@@ -1,4 +1,8 @@
-from unittest import TestCase
+try:
+    from unittest import TestCase, SkipTest
+except ImportError:
+    from unittest2 import TestCase, SkipTest
+
 from protected.string import ProtectedString
 
 PROTECTED_STRING = 'my_secret'
@@ -42,6 +46,7 @@ class ProtectedStringTestCase(TestCase):
         self.assertEqual(str(protected_string), 'abcdef')
 
     def test_protected_string_replace(self):
+        raise SkipTest("https://github.com/wnyc/protected/issues/4")
         protected_string = ProtectedString("abcdef").replace('b', 'd')
         self.assertTrue(isinstance(protected_string, ProtectedString))
         self.assertEqual(str(protected_string), 'adcdef')
