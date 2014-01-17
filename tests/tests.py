@@ -23,22 +23,26 @@ class ProtectedStringTestCase(TestCase):
                                  self.protected_string)
 
     def test_protected_string_true(self):
-        self.assertTrue(ProtectedString("abc"))
-        self.assertTrue(self.protected_string)
+        self.assertTrue(bool(ProtectedString("abc")))
+
+    def test_protected_string_false(self):
+        self.assertFalse(bool(ProtectedString("")))
+
+    def test_protected_string_assert_instance(self):
         self.assertTrue(isinstance(self.protected_string, ProtectedString))
 
-    def test_protected_string_mutation(self):
+    def test_protected_string_add(self):
         ps_a = ProtectedString('abc') + 'def'
         self.assertTrue(isinstance(ps_a, ProtectedString))
         self.assertEqual(str(ps_a), 'abcdef')
 
+    def test_protected_string_radd(self):
         ps_b = 'abc' + ProtectedString('def')
         self.assertTrue(isinstance(ps_b, ProtectedString))
         self.assertEqual(str(ps_b), 'abcdef')
 
-        ps_c = ProtectedString("abcdef")
-        self.assertTrue(isinstance(ps_c, ProtectedString))
-        ps_c = ps_c.replace('b', 'd')
+    def test_protected_string_replace(self):
+        ps_c = ProtectedString("abcdef").replace('b', 'd')
         self.assertEqual(str(ps_c), 'adcdef')
         
 
